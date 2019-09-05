@@ -5,13 +5,16 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Create New User</title>
+	<title>Create New User</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	
 	<div align="center">
-		<h2>
+		<h2 class="pageheading">
 			<c:if test="${user!=null}">
 				Edit User
 			</c:if>
@@ -22,13 +25,13 @@
 	</div>
 	<div align="center">
 	<c:if test="${user!=null}">
-		 <form action="update_user" method="post" onsubmit="return validateFormInput()">
+		 <form action="update_user" method="post" id="userForm" >
 		 <input type="hidden" name="userId" value="${user.userId}">
 	</c:if>
 	<c:if test="${user==null}">
-		 <form action="create_user" method="post" onsubmit="return validateFormInput()">
+		 <form action="create_user" method="post" id="userForm">
 	</c:if> 
-		<table>
+		<table class="form">
 			<tr>
 				<td align="right">Email:</td>
 				<td align="left"><input type="text" name="email" id="email" size="20" value="${user.email}"></td>
@@ -46,40 +49,44 @@
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" value="Save">
-					<input type="button" value="Cancel" onClick="javascript:history.go(-1)">
+					<button type="submit">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<button id="buttonCancel">Cancel</button>
 				</td>	
 		</table>
-	  </form>
+		</form>
 	</div>
 	
 	<jsp:directive.include file="footer.jsp"/>
 </body>
 <script type="text/javascript">
- 	function validateFormInput(){
- 		var fieldEmail=document.getElementById("email");
- 		var fieldFullname=document.getElementById("fullname");
- 		var fieldPassword=document.getElementById("password");
- 		
- 		if(fieldEmail.value.length==0){
- 			 alert("Email is required");
- 			 fieldEmail.focus();
- 			 return false;
- 		}
- 		
- 		if(fieldFullname.value.length==0){
-			 alert("Full name is required");
-			 fieldFullname.focus();
-			 return false;
-		}
- 		
- 		if(fieldPassword.value.length==0){
-			 alert("Password is required");
-			 fieldPassword.focus();
-			 return false;
-		}
- 		return true;
- 	}
- 
+	$(document).ready(function(){
+		$("#userForm").validate({
+			rules:{
+				email:{
+					required:true,
+					email:true
+				},
+				fullname:"required",
+				<c:if test="${user == null}">
+				password:"required"
+				</c:if>
+			},
+			
+			messages:{
+				email:{
+					required:"Please enter email",
+					email:"Please enter an valid email adress"
+				},
+				fullname:"Please enter full name",
+				<c:if test="${user == null}">
+				password:"Please enter password"
+				</c:if>
+			}
+		});
+		$("#buttonCancel").click(function(){
+			history.go(-1);
+			
+		})
+	});
 </script>
 </html>
