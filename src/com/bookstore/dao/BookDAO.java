@@ -1,9 +1,11 @@
 package com.bookstore.dao;
 
+import java.lang.annotation.Retention;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.bookstore.entity.Book;
 
@@ -51,6 +53,16 @@ public class BookDAO extends JpaDAO<Book> implements GeenericDAO<Book> {
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Book.countAll");
+	}
+	public List<Book> listByCategory(Integer categoryId){
+		return super.findWithNamedQuery("Book.findByCategory","catId",categoryId);
+	}
+	public List<Book> listNewBooks(){
+		Query query=entityManager.createNamedQuery("Book.listNew");
+		query.setFirstResult(0);
+		query.setMaxResults(4);
+		return query.getResultList();
+		
 	}
 
 }
