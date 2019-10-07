@@ -1,18 +1,17 @@
 package com.bookstore.dao;
 
-import java.lang.annotation.Retention;
+
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+
 
 import com.bookstore.entity.Book;
 
 public class BookDAO extends JpaDAO<Book> implements GeenericDAO<Book> {
 
-	public BookDAO(EntityManager entityManager) {
-		super(entityManager);
+	public BookDAO() {
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -54,14 +53,18 @@ public class BookDAO extends JpaDAO<Book> implements GeenericDAO<Book> {
 	public long count() {
 		return super.countWithNamedQuery("Book.countAll");
 	}
+	public long countByCategory(Integer categoryId) {
+		return super.countWithNamedQuery("Book.countByCategory","catId",categoryId);
+	}
 	public List<Book> listByCategory(Integer categoryId){
 		return super.findWithNamedQuery("Book.findByCategory","catId",categoryId);
 	}
+	public List<Book> search(String keyword){
+		return super.findWithNamedQuery("Book.search","keyword",keyword);
+	}
 	public List<Book> listNewBooks(){
-		Query query=entityManager.createNamedQuery("Book.listNew");
-		query.setFirstResult(0);
-		query.setMaxResults(4);
-		return query.getResultList();
+		
+		return super.findWithNamedQuery("Book.listNew",0,4);
 		
 	}
 

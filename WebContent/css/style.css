@@ -69,3 +69,12 @@ input{
 	font_style:italic;
 	margin:5px;
 }
+div.center{
+	text-align: center;
+}
+div.book{
+	display: inline-block;
+	margin: 20px;
+	text-align: center;
+	border: 0px;
+}

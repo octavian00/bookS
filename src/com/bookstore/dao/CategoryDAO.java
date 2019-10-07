@@ -2,14 +2,13 @@ package com.bookstore.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 
 import com.bookstore.entity.Category;
 
 public class CategoryDAO extends JpaDAO<Category> implements GeenericDAO<Category> {
 
-	public CategoryDAO(EntityManager entityManager) {
-		super(entityManager);
+	public CategoryDAO() {
+	
 	}
 
 	@Override

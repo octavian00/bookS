@@ -9,7 +9,7 @@
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
-	<div align="center">
+	<div class="center">
 		<br/><br/>
 		<div align="center" style="width: 80%;margin: 0 auto; ">
 			<h2>New Books: </h2>

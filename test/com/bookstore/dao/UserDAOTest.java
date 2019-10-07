@@ -14,12 +14,11 @@ import com.bookstore.entity.Users;
 import javax.persistence.EntityNotFoundException;
 
 import javax.persistence.PersistenceException;
-public class UserDAOTest extends BaseDAOTest {
+public class UserDAOTest  {
 	private static UserDAO userDAO;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		 BaseDAOTest.setUpBeforeClass();
-		 userDAO=new UserDAO(entityManager);
+		 userDAO=new UserDAO();
 	}
 	
 	@Test
@@ -109,6 +108,6 @@ public class UserDAOTest extends BaseDAOTest {
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		BaseDAOTest.tearDownAfterClass();
+		userDAO.close();
 	}
 }
