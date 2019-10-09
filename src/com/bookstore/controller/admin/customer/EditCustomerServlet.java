@@ -1,7 +1,4 @@
-package com.bookstore.controller.frontend;
-
-
-import com.bookstore.service.BookServices;
+package com.bookstore.controller.admin.customer;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -9,21 +6,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.bookstore.service.CustomerServices;
 
-/**
- * Servlet implementation class ViewBookByCategoryServlet
- */
-@WebServlet("/view_category")
-public class ViewBookByCategoryServlet extends HttpServlet {
+@WebServlet("/admin/edit_customer")
+public class EditCustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-    public ViewBookByCategoryServlet() {
+       
+   
+    public EditCustomerServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BookServices bookServices=new BookServices(request, response);
-		bookServices.listBooksByCategory();
+			CustomerServices customerServices=new CustomerServices(request, response);
+			customerServices.editCustomer();
 	}
+
+	
 
 }

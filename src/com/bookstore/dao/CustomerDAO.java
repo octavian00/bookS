@@ -20,8 +20,7 @@ public class CustomerDAO extends JpaDAO<Customer> implements GeenericDAO<Custome
 
 	@Override
 	public List<Customer> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.findWithNamedQuery("Customer.findAll");
 	}
 
 	@Override
@@ -32,8 +31,20 @@ public class CustomerDAO extends JpaDAO<Customer> implements GeenericDAO<Custome
 
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return super.countWithNamedQuery("Customer.countAll");
 	}
 
+	@Override
+	public Customer update(Customer customer) {
+		customer.setRegisterOn(new Date());
+		return super.update(customer);
+	}
+	public Customer findByEmail(String email) {
+		List <Customer> listCustomers=super.findWithNamedQuery("Customer.findByEmail", "email", email);
+		if(!listCustomers.isEmpty()) {
+			return listCustomers.get(0);
+		}
+		return null;
+	} 
+	
 }

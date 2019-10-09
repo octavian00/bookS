@@ -2,6 +2,8 @@ package com.bookstore.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,12 +39,39 @@ public class CustomerDAOTest {
 
 	@Test
 	public void testGet() {
-		fail("Not yet implemented");
+		Integer customerId=6;
+		Customer customer=customerDAO.get(customerId);
+		assertNotNull(customer);
 	}
-
+	@Test
+	public void testUpdate() {
+		Customer customer=customerDAO.get(6);
+		String fullName="customerUpdate";
+		customer.setFullName(fullName);		
+		Customer updatedCustomer=customerDAO.update(customer);
+		assertTrue(updatedCustomer.getFullName().equals(fullName));
+	}
+	@Test
+	public void testDeleteCustomer() {
+		Integer customerId=6;
+		customerDAO.delete(customerId);
+		Customer customer=customerDAO.get(6);
+		assertNull(customer);
+	}
 	@Test
 	public void testListAll() {
-		fail("Not yet implemented");
+		List<Customer>listCustomers=customerDAO.listAll();
+		assertTrue(listCustomers.size()>0);
 	}
-
+	@Test
+	public void testCountAll() {
+		long totalCustomer=customerDAO.count();
+		assertEquals(1, totalCustomer);
+	}
+	@Test 
+	public void testfindByEmail() {
+		String email="customer@mail.com";
+		Customer customer=customerDAO.findByEmail(email);
+		assertNotNull(customer);
+	}
 }
