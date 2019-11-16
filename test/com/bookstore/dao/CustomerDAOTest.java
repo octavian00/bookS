@@ -2,6 +2,7 @@ package com.bookstore.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -25,14 +26,15 @@ public class CustomerDAOTest {
 	@Test
 	public void testCreateCustomer() {
 		Customer customer=new Customer();
-		customer.setEmail("customer@mail.com");
-		customer.setFullName("Customer");
-		customer.setPassword("customer");
+		customer.setEmail("mircear@mail.com");
+		customer.setFullName("Mircea");
+		customer.setPassword("mircea");
 		customer.setPhone("0764567891");
 		customer.setAddress("nr 1 Mihai Viteazu");
 		customer.setCity("Timisoara");
 		customer.setCountry("Romania");
 		customer.setZipcode("3306");
+		customer.setRegisterOn(new Date());
 		Customer createdCustomer=customerDAO.create(customer);
 		assertTrue(createdCustomer.getCustomerId()>0);
 	}
@@ -73,5 +75,19 @@ public class CustomerDAOTest {
 		String email="customer@mail.com";
 		Customer customer=customerDAO.findByEmail(email);
 		assertNotNull(customer);
+	}
+	@Test
+	public void testCheckLoginSucces() {
+		String email="customer@mail.com";
+		String password="customer";
+		Customer customer=customerDAO.checkLogin(email, password);
+		assertNotNull(customer);
+	}
+	@Test
+	public void testCheckLoginFailed() {
+		String email="ccustomer@mail.com";
+		String password="customer";
+		Customer customer=customerDAO.checkLogin(email, password);
+		assertNull(customer);
 	}
 }

@@ -78,3 +78,15 @@ div.book{
 	text-align: center;
 	border: 0px;
 }
+table.book{
+	width:80%;
+	border:5;
+	margin:0 auto;
+}
+table.normal{
+	border:0;
+}
+#book-title{
+	font-size:x-large;
+	font-weight:bold;
+}

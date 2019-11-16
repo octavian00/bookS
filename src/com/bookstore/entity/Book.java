@@ -2,9 +2,12 @@ package com.bookstore.entity;
 // Generated Jul 11, 2019 9:52:17 PM by Hibernate Tools 5.2.12.Final
 
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -178,12 +181,16 @@ public class Book implements java.io.Serializable {
 		this.lastUpdatedOn = lastUpdatedOn;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "book")
 	public Set<Review> getReviews() {
-		return this.reviews;
+		TreeSet<Review> sortedReviews=new TreeSet<Review>((review1, review2)-> 
+		review2.getReviewTime().compareTo(review1.getReviewTime()));
+		sortedReviews.addAll(reviews);
+		return sortedReviews;
 	}
 
 	public void setReviews(Set<Review> reviews) {
+	
 		this.reviews = reviews;
 	}
 
@@ -204,7 +211,43 @@ public class Book implements java.io.Serializable {
 	public void setBase64Image(String base64Image) {
 		this.base64Image=base64Image;
 	}
-
+	@Transient
+	public float getAverageRating() {
+		float averageRating=0.0f;
+		float sum=0.0f;
+		if(reviews.isEmpty()) {
+			return 0.0f;
+		}
+		for(Review review :reviews) {
+			sum+=review.getRating();
+		}
+		averageRating=sum/reviews.size();
+		return averageRating;
+	}
+	@Transient
+	public String getRatingString(float averageRating) {
+		int numberOfStars=(int)averageRating;
+		String result="";
+		for(int i=1;i<=numberOfStars;i++) {
+			result+="on,";
+		}
+		int next=numberOfStars;
+		if(numberOfStars<averageRating) {
+			result+="half,";
+			next=numberOfStars+1;
+		}
+		
+		for(int j=next;j<5;j++) {
+			result+="off,";
+		}
+		return result.substring(0,result.length()-1);
+	}
+	@Transient
+	public String getRatingStars() {
+		float averageRating=getAverageRating();
+		return getRatingString(averageRating);
+				
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

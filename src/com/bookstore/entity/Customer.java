@@ -25,10 +25,15 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 	@NamedQuery(name="Customer.findAll",query="SELECT c FROM Customer c "),
 	@NamedQuery(name="Customer.findByEmail",query="SELECT c FROM Customer c WHERE c.email=:email"),
-	@NamedQuery(name="Customer.countAll",query="SELECT COUNT (c.email) FROM Customer c")
+	@NamedQuery(name="Customer.countAll",query="SELECT COUNT (c.email) FROM Customer c"),
+	@NamedQuery(name="Customer.checkLogin",query="SELECT c FROM Customer c WHERE c.email=:email AND c.password=:pass")
 })
 public class Customer implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int customerId;
 	private String email;
 	private String fullName;

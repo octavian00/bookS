@@ -10,7 +10,9 @@
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	<div align="center">
-		<h3>${message}</h3>
+		<br/>
+			<h3>${message}</h3>
+		<br/>
 	</div>
 	
 	

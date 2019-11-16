@@ -7,8 +7,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.hibernate.query.criteria.internal.predicate.ExistsPredicate;
+import javax.servlet.http.HttpSession;
 
 import com.bookstore.dao.CustomerDAO;
 import com.bookstore.entity.Customer;
@@ -45,9 +44,11 @@ public class CustomerServices {
 		}else {
 			Customer newCustomer=new Customer();
 			updateCustomerFields(newCustomer);
-			customerDAO.create(newCustomer);
-			String message="New customer has been created succesfully";
-			listCustomers(message);
+			Customer createdCustomer=customerDAO.create(newCustomer);
+			if(createdCustomer.getCustomerId()>0) {
+				String message="New customer has been created succesfully";
+				listCustomers(message);
+			}
 		}
 	}
 	public void registerCustomer() throws ServletException, IOException {
@@ -60,7 +61,8 @@ public class CustomerServices {
 			Customer newCustomer=new Customer();
 			updateCustomerFields(newCustomer);
 			customerDAO.create(newCustomer);
-			 message="You have register succesfully! Thank you ";
+			 message="You have register succesfully! Thank you .</br> "
+			+"<a href='login'>Click here </a> to login";
 		}
 		request.setAttribute("message", message);
 		String messagePage="frontend/message.jsp";
@@ -137,5 +139,54 @@ public class CustomerServices {
 		customer.setCity(city);
 		customer.setZipcode(zipCode);
 		customer.setCountry(country);		
+	}
+	public void showLogin() throws ServletException, IOException {
+		String loginPage="frontend/login.jsp";
+		RequestDispatcher requestDispatcher =request.getRequestDispatcher(loginPage);
+		requestDispatcher.forward(request, response);
+	}
+	public void doLogin() throws ServletException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		
+		Customer customer = customerDAO.checkLogin(email, password);
+		
+		if (customer == null) {
+			String message = "Login failed. Please check your email and password.";
+			request.setAttribute("message", message);
+			showLogin();
+			
+		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute("loggedCustomer", customer);
+			
+			Object objRedirectURL = session.getAttribute("redirectURL");
+			
+			if (objRedirectURL != null) {
+				String redirectURL = (String) objRedirectURL;
+				session.removeAttribute("redirectURL");
+				response.sendRedirect(redirectURL);
+			} else {
+				showCustomerProfile();
+			}
+		}
+		
+	}
+	public void showCustomerProfile() throws ServletException, IOException {
+		String profilePage="frontend/customer_profile.jsp";
+		RequestDispatcher requestDispatcher=request.getRequestDispatcher(profilePage);
+		requestDispatcher.forward(request, response);
+	}
+	public void showCustomerProfileEditForm() throws ServletException, IOException {
+		String editPage="frontend/edit_profile.jsp";
+		RequestDispatcher requestDispatcher=request.getRequestDispatcher(editPage);
+		requestDispatcher.forward(request, response);
+		
+	}
+	public void updateCustomerProfile() throws ServletException, IOException {
+		Customer customer=(Customer) request.getSession().getAttribute("loggedCustomer");
+		updateCustomerFields(customer);
+		customerDAO.update(customer);
+		showCustomerProfile();
 	}
 }
